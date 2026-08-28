@@ -18,6 +18,8 @@ binary dump of the selection on your clipboard. That is what gets parsed.
 AI assistant ──stdio/MCP──▶ figma-clipboard-mcp ──▶ clipboard (⌘C) or a local .fig file
 ```
 
+![Select a design in Figma and press command C; the server parses the fig-kiwi container out of the clipboard's HTML flavor; the assistant loads the scene and reads trees, styles and variables](https://raw.githubusercontent.com/georg3103/figma-clipboard-mcp/main/docs/how-it-works.png)
+
 ## Why this exists
 
 | | Official Figma MCP / REST | figma-clipboard-mcp |
