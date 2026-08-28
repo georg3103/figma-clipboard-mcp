@@ -6,6 +6,13 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-08-28
+
+### Fixed
+
+- The server now introduces itself over MCP with the package's own name and version, so client
+  logs match what is installed.
+
 ## [0.1.0] - 2026-08-28
 
 First public release.
@@ -27,5 +34,6 @@ First public release.
 - The package installs on any platform: clipboard reading needs macOS and says so at call time,
   while `.fig` files are parsed anywhere.
 
-[Unreleased]: https://github.com/georg3103/figma-clipboard-mcp/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/georg3103/figma-clipboard-mcp/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/georg3103/figma-clipboard-mcp/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/georg3103/figma-clipboard-mcp/releases/tag/v0.1.0

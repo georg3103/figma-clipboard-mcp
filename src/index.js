@@ -5,6 +5,8 @@
 //
 // Note: stdout carries the MCP protocol, so all logging goes through console.error.
 
+import { createRequire } from 'node:module';
+
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
@@ -44,7 +46,11 @@ const asText = (result) => ({
   content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
 });
 
-const server = new McpServer({ name: 'figma-local', version: '0.2.0' });
+// The server introduces itself with the package's own name and version, so client logs
+// match what is installed.
+const { name, version } = createRequire(import.meta.url)('../package.json');
+
+const server = new McpServer({ name, version });
 
 server.registerTool(
   'load_clipboard',
