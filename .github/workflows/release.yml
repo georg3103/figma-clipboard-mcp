@@ -26,14 +26,6 @@ jobs:
           npm install -g npm@latest
           npm --version
 
-      # Trusted publishing needs npm 11.5.1+ and an OIDC token from the runner.
-      - name: Report the publishing prerequisites
-        run: |
-          echo "npm     $(npm --version)"
-          echo "node    $(node --version)"
-          echo "oidc url set: ${ACTIONS_ID_TOKEN_REQUEST_URL:+yes}${ACTIONS_ID_TOKEN_REQUEST_URL:-no}"
-          echo "npmrc:"; cat ~/.npmrc 2>/dev/null || echo "  (none)"
-
       - run: npm ci
       - run: npm test
 
@@ -56,10 +48,16 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
+          # Trusted publishing needs npm 11.5.1+ and an id token from the runner; both are printed
+          # here so a failure carries its own diagnosis.
+          echo "npm $(npm --version), node $(node --version)"
+          echo "id token available: ${ACTIONS_ID_TOKEN_REQUEST_URL:+yes}${ACTIONS_ID_TOKEN_REQUEST_URL:-no}"
+          echo "npmrc: $(cat ~/.npmrc 2>/dev/null || echo none)"
+
           if npm view "figma-clipboard-mcp@$VERSION" version > /dev/null 2>&1; then
             echo "figma-clipboard-mcp@$VERSION is already published, skipping."
           else
-            npm publish --access public
+            npm publish --access public --loglevel verbose
           fi
 
       - name: Take the release notes from the changelog
