@@ -77,7 +77,9 @@ server.registerTool(
       'Reads a .fig file saved from Figma through File - Save local copy and makes it the current scene. ' +
       'Unlike the clipboard it carries the whole file, every page included. ' +
       'It is a snapshot taken at export time: after the design changes, the file has to be saved again.',
-    inputSchema: { path: z.string().describe('Absolute path to the .fig file') },
+    inputSchema: {
+      path: z.string().describe('Path to the .fig file; a leading ~ means the home directory'),
+    },
   },
   async ({ path }) => {
     scene = buildScene(readFigFile(path));

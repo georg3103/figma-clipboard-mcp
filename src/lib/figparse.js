@@ -5,6 +5,8 @@
 
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
 import { inflateRawSync } from 'node:zlib';
 
 import { decompress as zstdDecompress } from 'fzstd';
@@ -50,9 +52,20 @@ export function parseFigBuffer(buf) {
   return { version, message };
 }
 
+/**
+ * Expands a leading ~ to the home directory: paths are usually typed or pasted by a person,
+ * and ~/Downloads/design.fig is how a person writes one.
+ */
+export function expandHome(filePath, home = homedir()) {
+  if (filePath === '~') return home;
+  if (filePath.startsWith('~/')) return join(home, filePath.slice(2));
+  return filePath;
+}
+
 /** Reads a .fig saved through File - Save local copy. */
 export function readFigFile(path) {
-  return { source: `file ${path}`, ...parseFigBuffer(readFileSync(path)) };
+  const resolved = expandHome(path);
+  return { source: `file ${resolved}`, ...parseFigBuffer(readFileSync(resolved)) };
 }
 
 /**

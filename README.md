@@ -85,14 +85,14 @@ Or, for any MCP client, in its config:
    the dump, so select generously.
 2. Ask your assistant to read the design. Call `load_clipboard` again after every new copy.
 3. For a whole file at once, use `File → Save local copy` in Figma and load that `.fig` — a snapshot taken
-   at export time, with no live sync.
+   at export time, with no live sync. Paths may start with `~`.
 
 ## Tools
 
 | Tool | What it does |
 |---|---|
 | `load_clipboard` | Parse what you copied in Figma and make it the current scene |
-| `load_fig_file(path)` | Same from a saved `.fig` — the whole file, all pages |
+| `load_fig_file(path)` | Same from a saved `.fig` — the whole file, all pages; `~` is expanded |
 | `list_frames` | Top-level nodes with their `node_id` |
 | `get_layer_tree(node_id, max_depth=4, style='layout')` | Layers with types, sizes, text and styles. `style`: `none` — structure only, `layout` — auto layout, gaps, padding, radii, `full` — plus fills, strokes, typography, effects |
 | `get_node_styles(node_id)` | Every style of a single node at once |

@@ -46,7 +46,7 @@ claude mcp add figma-clipboard --scope user -- npx -y figma-clipboard-mcp
 | Инструмент | Назначение |
 |---|---|
 | `load_clipboard` | прочитать скопированное в Figma, сделать текущей сценой |
-| `load_fig_file(path)` | то же из сохранённого `.fig` — весь файл, все страницы |
+| `load_fig_file(path)` | то же из сохранённого `.fig` — весь файл, все страницы; `~` раскрывается |
 | `list_frames` | верхнеуровневые узлы с `node_id` |
 | `get_layer_tree(node_id, max_depth=4, style='layout')` | слои: типы, размеры, тексты и стили; `style`: `none` — только структура, `layout` — автолэйаут, гэпы, паддинги, скругления, `full` — плюс заливки, обводки, типографика, эффекты |
 | `get_node_styles(node_id)` | все стили одного узла разом |
