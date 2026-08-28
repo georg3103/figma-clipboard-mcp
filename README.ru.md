@@ -30,6 +30,22 @@ Claude Code ──stdio/MCP──▶ src/index.js ──▶ буфер обме�
 claude mcp add figma-clipboard --scope user -- npx -y figma-clipboard-mcp
 ```
 
+### Если Node стоит через nvm
+
+MCP-клиент запускает серверы со своим окружением, и шимов nvm в его `PATH` обычно нет: `npx` не
+находится, а со стороны это выглядит как таймаут при старте. Тогда ставьте пакет глобально и
+указывайте абсолютные пути:
+
+```bash
+npm install -g figma-clipboard-mcp
+
+claude mcp add figma-clipboard --scope user -- \
+  "$(which node)" "$(npm root -g)/figma-clipboard-mcp/src/index.js"
+```
+
+Обновление — `npm install -g figma-clipboard-mcp@latest`, пути при этом не меняются. Они изменятся
+только при переключении версии Node: nvm держит глобальные пакеты отдельно для каждой.
+
 Для работы над самим пакетом: `npm install` в корне, тогда сервер запускается как `node src/index.js`,
 а `.mcp.json` в корне репозитория подхватится Claude Code автоматически.
 

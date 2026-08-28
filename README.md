@@ -79,6 +79,36 @@ Or, for any MCP client, in its config:
 }
 ```
 
+### If your Node comes from nvm
+
+MCP clients start servers with their own environment, which usually does not include the shims nvm
+puts on your shell's `PATH`. The client then cannot find `npx`, and the server appears to time out
+while starting. Install the package globally and point at absolute paths instead:
+
+```bash
+npm install -g figma-clipboard-mcp
+
+claude mcp add figma-clipboard --scope user -- \
+  "$(which node)" "$(npm root -g)/figma-clipboard-mcp/src/index.js"
+```
+
+The same two paths work in any client's config:
+
+```json
+{
+  "mcpServers": {
+    "figma-clipboard": {
+      "command": "/absolute/path/to/node",
+      "args": ["/absolute/path/to/lib/node_modules/figma-clipboard-mcp/src/index.js"]
+    }
+  }
+}
+```
+
+Print them with `which node` and `npm root -g`. Upgrading is then
+`npm install -g figma-clipboard-mcp@latest`, and the paths stay the same — unless you switch Node
+versions, since nvm keeps global packages per version.
+
 ## Use
 
 1. In Figma, select a screen, a frame or a component and press `⌘C`. Only what you selected ends up in
