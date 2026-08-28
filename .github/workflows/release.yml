@@ -2,10 +2,12 @@ name: Release
 
 on:
   push:
-    tags: ['v*']
+    branches: [main]
 
 permissions:
   contents: write
+  issues: write
+  pull-requests: write
   id-token: write
 
 jobs:
@@ -13,60 +15,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # semantic-release works out the next version from the full tag history.
+          fetch-depth: 0
+
       # No registry-url here on purpose: it writes an .npmrc line expecting NODE_AUTH_TOKEN,
       # and an empty token makes npm publish anonymously - which the registry answers with a 404.
+      # Authentication comes from GitHub's OIDC token instead: npmjs.com lists this repository
+      # and this workflow file as a trusted publisher for the package.
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: npm
 
-      # Trusted publishing needs npm 11.5.1 or newer, which Node does not ship yet.
-      - name: Update npm
-        run: |
-          npm install -g npm@latest
-          npm --version
-
       - run: npm ci
       - run: npm test
 
-      - name: Check the tag against the package version
-        run: |
-          tag="${GITHUB_REF_NAME#v}"
-          pkg=$(node -p "require('./package.json').version")
-          if [ "$tag" != "$pkg" ]; then
-            echo "Tag $GITHUB_REF_NAME does not match package version $pkg." >&2
-            echo "Run 'npm version' so the two move together." >&2
-            exit 1
-          fi
-          echo "version=$pkg" >> "$GITHUB_OUTPUT"
-        id: version
-
-      # Authentication comes from GitHub's OIDC token, so there is no npm secret to keep:
-      # npmjs.com must list this repository and workflow as a trusted publisher for the package.
-      # Skipped when the version is already on the registry, so re-pushing a tag is harmless.
-      - name: Publish to npm
+      - name: Release
         env:
-          VERSION: ${{ steps.version.outputs.version }}
-        run: |
-          if npm view "figma-clipboard-mcp@$VERSION" version > /dev/null 2>&1; then
-            echo "figma-clipboard-mcp@$VERSION is already published, skipping."
-          else
-            npm publish --access public
-          fi
-
-      - name: Take the release notes from the changelog
-        run: |
-          awk -v ver="${GITHUB_REF_NAME#v}" '
-            $0 ~ "^## \\[" ver "\\]" { found = 1; next }
-            found && /^## \[/ { exit }
-            found { print }
-          ' CHANGELOG.md > notes.md
-          if [ ! -s notes.md ]; then
-            echo "See CHANGELOG.md for the details of this release." > notes.md
-          fi
-          cat notes.md
-
-      - name: Create the GitHub release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file notes.md --verify-tag
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release

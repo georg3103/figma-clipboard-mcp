@@ -56,20 +56,27 @@ changes get merged faster than large ones.
 
 ## Releasing
 
-Releases run off tags. Bumping the version, tagging and pushing is the whole ceremony:
+Releases happen on their own. Land a change on `main`, and the release workflow works out the next
+version from the commit messages, writes the changelog, publishes to npm and opens a GitHub release.
 
-```bash
-# edit CHANGELOG.md: move Unreleased items under the new version
-npm version patch     # or minor / major - commits and tags for you
-git push --follow-tags
-```
+What a commit type does:
 
-Pushing a `v*` tag runs the release workflow, which checks the tag against the version in
-`package.json`, runs the tests, publishes to npm with provenance, and opens a GitHub release
-with the notes taken from that version's section of the changelog.
+| Type | Effect |
+|---|---|
+| `fix:` | patch release |
+| `feat:` | minor release |
+| `BREAKING CHANGE:` in the body | major release |
+| `chore:`, `ci:`, `docs:`, `test:`, `refactor:` | no release |
+
+So the message is the version decision — worth a second of thought before committing.
+
+One trap worth knowing: the words *breaking change* anywhere in a commit body mark the release as
+major, even mid-sentence. Describing the convention inside a commit message is enough to trigger it.
 
 Publishing authenticates through GitHub's OIDC token — npm's trusted publishing — so there is no
 secret to store or rotate, and provenance is attached automatically. It is configured once on
 npmjs.com, under the package's Settings, by naming this repository and `release.yml` as a trusted
-publisher. Re-pushing a tag is safe: the publish step is skipped when that version already exists
-on the registry.
+publisher; renaming that workflow file means reconfiguring it there.
+
+After a release the bot pushes a `chore(release):` commit with the new version and changelog, so
+pull before starting the next change.
