@@ -19,6 +19,9 @@ jobs:
           registry-url: https://registry.npmjs.org
           cache: npm
 
+      # Trusted publishing needs a newer npm than Node ships with.
+      - run: npm install -g npm@latest
+
       - run: npm ci
       - run: npm test
 
@@ -34,16 +37,17 @@ jobs:
           echo "version=$pkg" >> "$GITHUB_OUTPUT"
         id: version
 
+      # Authentication comes from GitHub's OIDC token, so there is no npm secret to keep:
+      # npmjs.com must list this repository and workflow as a trusted publisher for the package.
       # Skipped when the version is already on the registry, so re-pushing a tag is harmless.
       - name: Publish to npm
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           if npm view "figma-clipboard-mcp@$VERSION" version > /dev/null 2>&1; then
             echo "figma-clipboard-mcp@$VERSION is already published, skipping."
           else
-            npm publish --access public --provenance
+            npm publish --access public
           fi
 
       - name: Take the release notes from the changelog

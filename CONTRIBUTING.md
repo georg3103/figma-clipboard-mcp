@@ -68,6 +68,8 @@ Pushing a `v*` tag runs the release workflow, which checks the tag against the v
 `package.json`, runs the tests, publishes to npm with provenance, and opens a GitHub release
 with the notes taken from that version's section of the changelog.
 
-Publishing needs an `NPM_TOKEN` repository secret holding an npm **automation** token — that kind
-bypasses the one-time password prompt, which a workflow cannot answer. Re-pushing a tag is safe:
-the publish step is skipped when that version already exists on the registry.
+Publishing authenticates through GitHub's OIDC token — npm's trusted publishing — so there is no
+secret to store or rotate, and provenance is attached automatically. It is configured once on
+npmjs.com, under the package's Settings, by naming this repository and `release.yml` as a trusted
+publisher. Re-pushing a tag is safe: the publish step is skipped when that version already exists
+on the registry.
