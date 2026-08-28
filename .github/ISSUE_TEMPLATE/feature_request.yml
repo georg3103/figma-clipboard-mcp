@@ -1,0 +1,16 @@
+name: Feature request
+description: Ask for data the server does not expose yet
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What you need and why
+      description: What are you trying to build from the design that is missing today?
+    validations:
+      required: true
+  - type: textarea
+    id: shape
+    attributes:
+      label: What the answer should look like
+      description: A sketch of the output you would want back.
