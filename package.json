@@ -1,0 +1,52 @@
+{
+  "name": "figma-clipboard-mcp",
+  "version": "0.1.0",
+  "description": "MCP server that reads Figma designs from the clipboard or a local .fig file — no REST API, no access token, no paid seat",
+  "type": "module",
+  "license": "MIT",
+  "author": "georg3103",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/georg3103/figma-clipboard-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/georg3103/figma-clipboard-mcp/issues"
+  },
+  "homepage": "https://github.com/georg3103/figma-clipboard-mcp#readme",
+  "bin": {
+    "figma-clipboard-mcp": "src/index.js"
+  },
+  "main": "src/index.js",
+  "files": [
+    "src",
+    "README.md",
+    "README.ru.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "figma",
+    "claude",
+    "claude-code",
+    "design-tokens",
+    "clipboard",
+    "fig"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "os": [
+    "darwin"
+  ],
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "fzstd": "^0.1.1",
+    "kiwi-schema": "^0.5.0",
+    "zod": "^3.25.76"
+  }
+}
