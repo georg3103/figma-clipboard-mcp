@@ -53,3 +53,21 @@ Adding a new piece of design data usually means: find the field on a raw node, w
 
 Run `npm test` and say in the description what you checked against a real design. Small, focused
 changes get merged faster than large ones.
+
+## Releasing
+
+Releases run off tags. Bumping the version, tagging and pushing is the whole ceremony:
+
+```bash
+# edit CHANGELOG.md: move Unreleased items under the new version
+npm version patch     # or minor / major - commits and tags for you
+git push --follow-tags
+```
+
+Pushing a `v*` tag runs the release workflow, which checks the tag against the version in
+`package.json`, runs the tests, publishes to npm with provenance, and opens a GitHub release
+with the notes taken from that version's section of the changelog.
+
+Publishing needs an `NPM_TOKEN` repository secret holding an npm **automation** token — that kind
+bypasses the one-time password prompt, which a workflow cannot answer. Re-pushing a tag is safe:
+the publish step is skipped when that version already exists on the registry.
