@@ -22,5 +22,10 @@ First public release.
 - Styles with three detail levels: structure, layout, and full paints, typography and effects.
 - Paints resolved to the variable they are bound to, and text resolved to its text style name.
 
+### Notes
+
+- The package installs on any platform: clipboard reading needs macOS and says so at call time,
+  while `.fig` files are parsed anywhere.
+
 [Unreleased]: https://github.com/georg3103/figma-clipboard-mcp/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/georg3103/figma-clipboard-mcp/releases/tag/v0.1.0

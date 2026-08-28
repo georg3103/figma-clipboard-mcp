@@ -55,6 +55,19 @@ export function readFigFile(path) {
   return { source: `file ${path}`, ...parseFigBuffer(readFileSync(path)) };
 }
 
+/**
+ * Reading the clipboard goes through osascript, which exists only on macOS.
+ * Everything else in this package — .fig files included — works anywhere.
+ */
+export function assertClipboardSupport(platform = process.platform) {
+  if (platform !== 'darwin') {
+    throw new Error(
+      `Reading the Figma clipboard needs macOS, and this is ${platform}. ` +
+        'Save the design with File - Save local copy in Figma and load that .fig file instead.'
+    );
+  }
+}
+
 function clipboardFlavor(className) {
   const raw = execFileSync('osascript', ['-e', `the clipboard as «class ${className}»`], {
     encoding: 'utf8',
@@ -74,6 +87,8 @@ function between(text, start, end) {
 
 /** Reads a selection copied in Figma (⌘C) from the HTML flavor of the macOS clipboard. */
 export function readClipboard() {
+  assertClipboardSupport();
+
   let html;
   try {
     html = clipboardFlavor('HTML').toString('utf8');
@@ -98,6 +113,8 @@ export function readClipboard() {
 
 /** Reads a PNG from the clipboard (⌘⇧C — Copy as PNG). */
 export function readClipboardPng() {
+  assertClipboardSupport();
+
   try {
     return clipboardFlavor('PNGf');
   } catch (e) {

@@ -4,7 +4,7 @@
 [![CI](https://github.com/georg3103/figma-clipboard-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/georg3103/figma-clipboard-mcp/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-3c873a.svg)](package.json)
-[![Platform](https://img.shields.io/badge/platform-macOS-000000.svg)](#limitations)
+[![Clipboard](https://img.shields.io/badge/clipboard-macOS-000000.svg)](#limitations)
 [![MCP](https://img.shields.io/badge/MCP-stdio%20server-6b4fbb.svg)](https://modelcontextprotocol.io)
 
 **Read Figma designs from your AI assistant — screens, layer trees with styles, design-system components
@@ -26,7 +26,7 @@ AI assistant ──stdio/MCP──▶ figma-clipboard-mcp ──▶ clipboard (�
 | Credentials | personal access token | none |
 | Rate limits | yes | no requests are made at all |
 | Source of truth | the file on Figma's servers | what you copied, or a saved `.fig` |
-| Platform | any | macOS |
+| Platform | any | macOS for the clipboard, any for .fig files |
 
 It reads what Figma places on your own clipboard, from a file you already have open. Nothing is
 downloaded, and nothing is sent anywhere.
@@ -134,6 +134,7 @@ flat list of nodes, and this server rebuilds the hierarchy from each node's `par
 - A library component's definition is available only if that component itself made it into the copy.
 - Instance property names stay as ids when the component definition is outside the scene.
 - Raster assets are not extracted: image fills expose a hash, the bytes sit in the scene's blobs.
+- Clipboard reading is macOS only. On Linux and Windows, use `load_fig_file` with a saved `.fig`.
 - The scene is a snapshot. Copy again after the design changes.
 
 The format is undocumented and Figma can change it at any time — this reads what Figma places on your own
