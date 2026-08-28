@@ -48,16 +48,10 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          # Trusted publishing needs npm 11.5.1+ and an id token from the runner; both are printed
-          # here so a failure carries its own diagnosis.
-          echo "npm $(npm --version), node $(node --version)"
-          echo "id token available: ${ACTIONS_ID_TOKEN_REQUEST_URL:+yes}${ACTIONS_ID_TOKEN_REQUEST_URL:-no}"
-          echo "npmrc: $(cat ~/.npmrc 2>/dev/null || echo none)"
-
           if npm view "figma-clipboard-mcp@$VERSION" version > /dev/null 2>&1; then
             echo "figma-clipboard-mcp@$VERSION is already published, skipping."
           else
-            npm publish --access public --loglevel verbose
+            npm publish --access public
           fi
 
       - name: Take the release notes from the changelog
