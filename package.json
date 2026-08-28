@@ -1,6 +1,6 @@
 {
   "name": "figma-clipboard-mcp",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "MCP server that reads Figma designs from the clipboard or a local .fig file — no REST API, no access token, no paid seat",
   "type": "module",
   "license": "MIT",
